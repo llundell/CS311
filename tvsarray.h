@@ -171,10 +171,34 @@ public:
 
 	// resize
 	// ??? Guarantee
-	void resize(size_type newsize)
+	void resize(size_type newSize)
 	{
-		// TODO: Write this!!!
-	}
+		if (newSize <= _size) {
+			_size = newSize;
+		}
+		else {
+			size_type newCapacity = _size * 2;
+			if (newCapacity < newSize) {
+				newCapacity = newSize;
+			}
+			if (newCapacity < DEFAULT_CAP) {
+				newCapacity = DEFAULT_CAP;
+			}
+
+			auto newData = new value_type[newCapacity];
+
+			try {
+				std::copy(begin(), end(), newData);
+			}
+			catch(...)
+			{
+			delete [] newData;
+			throw;
+			}
+			std::swap(_data, newData);
+			delete [] newData;
+		}
+}
 
 	// insert
 	// ??? Guarantee
