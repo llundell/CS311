@@ -8,8 +8,8 @@
 * and slides on Project 5.
 */
 
-#ifndef FILE_VSARRAY_H_INCLUDED
-#define FILE_VSARRAY_H_INCLUDED
+#ifndef FILE_TVSARRAY_H_INCLUDED
+#define FILE_TVSARRAY_H_INCLUDED
 
 #include <cstddef>
 // For std::size_t
@@ -52,15 +52,16 @@ public:
 	//Default constructor
 	// Strong Guarantee
 	// Post-condition: creates new 0 item array of type ValType
-	explicit TVSArray()
-				: _capacity(std::max(size, size_type(DEFAULT_CAP))),
-				_size(0),
-				_data(new value_type[_capacity])
+	TVSArray()
+	: _capacity(DEFAULT_CAP),
+	_size(0),
+	_data(new value_type[_capacity])
 	{}
-	const explicit TVSArray()
-				: _capacity(std::max(size, size_type(DEFAULT_CAP))),
-				_size(0),
-				_data(new value_type[_capacity])
+
+	explicit TVSArray(size_type size) :
+	_size(size),
+	_capacity(std::max(size, size_type(DEFAULT_CAP))),
+	_data(new value_type[_capacity])
 	{}
 
 	// Copy ctor
