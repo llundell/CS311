@@ -104,7 +104,7 @@ public:
 	// No-Throw Guarantee
 	TVSArray & operator=(TVSArray && other) noexcept
 	{
-	return *this;  // Dummy return
+		return *this;  // Dummy return
 	// TODO: Write this!!!
 	}
 
@@ -112,7 +112,7 @@ public:
 	// No-Throw Guarantee
 	~TVSArray()
 	{
-	delete [] _data;
+		delete [] _data;
 	}
 
 	// ***** TVSArray: general public operators *****
@@ -172,7 +172,7 @@ public:
 	// ??? Guarantee
 	void resize(size_type newsize)
 	{
-	// TODO: Write this!!!
+		// TODO: Write this!!!
 	}
 
 	// insert
@@ -181,7 +181,7 @@ public:
 	const value_type & item)
 	{
 		return pos;  // Dummy return
-	// TODO: Write this!!!
+		// TODO: Write this!!!
 	}
 
 	// erase
@@ -189,7 +189,7 @@ public:
 	iterator erase(iterator pos)
 	{
 		return pos;  // Dummy return
-	// TODO: Write this!!!
+		// TODO: Write this!!!
 	}
 
 	// push_back
