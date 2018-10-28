@@ -4,18 +4,18 @@
 // Updated: 10/27/18
 // Header for class Templated Very Smart Array Class
 /* Sources used:
- * Project 2 Code, Dr. Chappell's vsarray.cpp, vsarray.h,
- * and slides on Project 5.
- */
+* Project 2 Code, Dr. Chappell's vsarray.cpp, vsarray.h,
+* and slides on Project 5.
+*/
 
- #ifndef FILE_VSARRAY_H_INCLUDED
- #define FILE_VSARRAY_H_INCLUDED
+#ifndef FILE_VSARRAY_H_INCLUDED
+#define FILE_VSARRAY_H_INCLUDED
 
- #include <cstddef>
- // For std::size_t
- #include <algorithm>
- using std::copy;
- // For std::max;
+#include <cstddef>
+// For std::size_t
+#include <algorithm>
+using std::copy;
+// For std::max; std::swap;
 
 // *********************************************************************
 // Template class TVSArray
@@ -27,190 +27,205 @@
 template <typename ValType>
 class TVSArray {
 
-// TVSArray: Types
+
+	// TVSArray: Types
 public:
 
-		// size_type: type of sizes & indices
-		using size_type = std::size_t;
-		// value_type: type of data items
-		using value_type = ValType;
+	// size_type: type of sizes & indices
+	using size_type = std::size_t;
+	// value_type: type of data items
+	using value_type = ValType;
 
-		// iterator, const_iterator: random-access iterator types
-		using iterator = value_type *;
-		using const_iterator = const value_type *;
+	// iterator, const_iterator: random-access iterator types
+	using iterator = value_type *;
+	using const_iterator = const value_type *;
 
-// ***** TVSArray: internal-use constants *****
+	// ***** TVSArray: internal-use constants *****
 private:
 
-		// Capacity of default-constructed object
-		enum { DEFAULT_CAP = 16 };
+	// Capacity of default-constructed object
+	enum { DEFAULT_CAP = 16 };
 
- // ***** VSArray: ctors, dctor, op= *****
+	// ***** TVSArray: ctors, dctor, op= *****
 public:
 
-		 //Default constructor
-		 // Strong Guarantee
-		 // Post-condition: creates new 0 item array of type ValType
-		 explicit TVSArray()
-		 			: _capacity(std::max(size, size_type(DEFAULT_CAP)))
-					_size(0)
-					_tvsarray(new value_type[_capacity]),
-		 {};
+	//Default constructor
+	// Strong Guarantee
+	// Post-condition: creates new 0 item array of type ValType
+	explicit TVSArray()
+				: _capacity(std::max(size, size_type(DEFAULT_CAP))),
+				_size(0),
+				_data(new value_type[_capacity])
+	{}
+	const explicit TVSArray()
+				: _capacity(std::max(size, size_type(DEFAULT_CAP))),
+				_size(0),
+				_data(new value_type[_capacity])
+	{}
 
-		// Copy ctor
-		// Strong Guarantee
-		TVSArray(const TVSArray & other)
-					:_capacity(other._capacity),
-					 _size(other._size),
-					 _data(new value_type[other._capacity])
-		{
-				copy(other.begin(), other.end(), begin());
-		}
-
-		// Move ctor
-		// No-Throw Guarantee
-		TVSArray(TVSArray && other) noexcept
+	// Copy ctor
+	// Strong Guarantee
+	TVSArray(const TVSArray & other)
 				:_capacity(other._capacity),
-				 _size(other._size),
-				 _data(other._data)
+				_size(other._size),
+				_data(new value_type[other._capacity])
+	{
+		try
 		{
-				other._capacity = 0;
-				other._size = 0;
-				other._data = nullptr;
+			copy(other.begin(), other.end(), begin());
 		}
-
-		// Copy assignment operator
-		// ??? Guarantee
-		VSArray & operator=(const VSArray & other)
+		catch (...)
 		{
-				return *this;  // Dummy return
-		    // TODO: Write this!!!
+			delete [] _data;
+			throw;
 		}
+	}
+	// Move ctor
+	// No-Throw Guarantee
+	TVSArray(TVSArray && other) noexcept
+				:_capacity(other._capacity),
+				_size(other._size),
+				_data(other._data)
+	{
+		other._capacity = 0;
+		other._size = 0;
+		other._data = nullptr;
+	}
 
-		// Move assignment operator
-		// No-Throw Guarantee
-		VSArray & operator=(VSArray && other) noexcept
-		{
-				return *this;  // Dummy return
-				// TODO: Write this!!!
-		}
+	// Copy assignment operator
+	// ??? Guarantee
+	TVSArray & operator=(const TVSArray & other)
+	{
+		return *this;  // Dummy return
+	// TODO: Write this!!!
+	}
 
-		// Dctor
-		// No-Throw Guarantee
-		~VSArray()
-		{
-				delete [] _data;
-		}
+	// Move assignment operator
+	// No-Throw Guarantee
+	TVSArray & operator=(TVSArray && other) noexcept
+	{
+	return *this;  // Dummy return
+	// TODO: Write this!!!
+	}
 
-// ***** VSArray: general public operators *****
+	// Dctor
+	// No-Throw Guarantee
+	~TVSArray()
+	{
+	delete [] _data;
+	}
+
+	// ***** TVSArray: general public operators *****
 public:
 
-    // operator[] - non-const & const
-    // No-Throw Guarantee
-    value_type & operator[](size_type index)
-    {
-        return _data[index];
-    }
-    const value_type & operator[](size_type index) const
-    {
-        return _data[index];
-    }
+	// operator[] - non-const & const
+	// No-Throw Guarantee
+	value_type & operator[](size_type index)
+	{
+		return _data[index];
+	}
+	const value_type & operator[](size_type index) const
+	{
+		return _data[index];
+	}
 
-		// ***** VSArray: general public functions *****
-		public:
+	// ***** TVSArray: general public functions *****
+public:
 
-		    // size
-		    // No-Throw Guarantee
-		    size_type size() const
-		    {
-		        return _size;
-		    }
+	// size
+	// No-Throw Guarantee
+	size_type size() const
+	{
+		return _size;
+	}
 
-		    // empty
-		    // No-Throw Guarantee
-		    bool empty() const
-		    {
-		        return size() == 0;
-		    }
+	// empty
+	// No-Throw Guarantee
+	bool empty() const
+	{
+		return size() == 0;
+	}
 
-		    // begin - non-const & const
-		    // No-Throw Guarantee
-		    iterator begin()
-		    {
-		        return _data;
-		    }
-		    const_iterator begin() const
-		    {
-		        return _data;
-		    }
+	// begin - non-const & const
+	// No-Throw Guarantee
+	iterator begin()
+	{
+		return _data;
+	}
+	const_iterator begin() const
+	{
+		return _data;
+	}
 
-		    // end - non-const & const
-		    // No-Throw Guarantee
-		    iterator end()
-		    {
-		        return begin() + size();
-		    }
-		    const_iterator end() const
-		    {
-		        return begin() + size();
-		    }
+	// end - non-const & const
+	// No-Throw Guarantee
+	iterator end()
+	{
+		return begin() + size();
+	}
+	const_iterator end() const
+	{
+		return begin() + size();
+	}
 
-		    // resize
-		    // ??? Guarantee
-		    void resize(size_type newsize)
-				{
-				    // TODO: Write this!!!
-				}
+	// resize
+	// ??? Guarantee
+	void resize(size_type newsize)
+	{
+	// TODO: Write this!!!
+	}
 
-		    // insert
-		    // ??? Guarantee
-		    iterator insert(iterator pos,
-		                    const value_type & item)
-				{
-					return pos;  // Dummy return
-					// TODO: Write this!!!
-				}
+	// insert
+	// ??? Guarantee
+	iterator insert(iterator pos,
+	const value_type & item)
+	{
+		return pos;  // Dummy return
+	// TODO: Write this!!!
+	}
 
-		    // erase
-		    // ??? Guarantee
-		    iterator erase(iterator pos)
-				{
-					return pos;  // Dummy return
-					// TODO: Write this!!!
-				}
+	// erase
+	// ??? Guarantee
+	iterator erase(iterator pos)
+	{
+		return pos;  // Dummy return
+	// TODO: Write this!!!
+	}
+
+	// push_back
+	// InsertEnd operation.
+	// ??? Guarantee
+	void push_back(const value_type & item)
+	{
+		insert(end(), item);
+	}
+
+	// pop_back
+	// RemoveEnd operation.
+	// ??? Guarantee
+	void pop_back()
+	{
+		erase(end()-1);
+	}
+
+	// swap
+	// No-Throw Guarantee
+	void swap(TVSArray & other) noexcept
+	{
+		using std::swap;
+		swap(_size, other._capacity);
+		swap(_size, other._size);
+		swap(_data, other._data);
+	}
+
+	// ***** TVSArray: data members *****
+private:
+
+	size_type    _capacity;  // Size of our allocated array
+	size_type    _size;      // Size of client's data
+	value_type * _data;      // Pointer to array
+
+};  // End class TVSArray
 
 
-		    // push_back
-		    // InsertEnd operation.
-		    // ??? Guarantee
-		    void push_back(const value_type & item)
-		    {
-		        insert(end(), item);
-		    }
-
-		    // pop_back
-		    // RemoveEnd operation.
-		    // ??? Guarantee
-		    void pop_back()
-		    {
-		        erase(end()-1);
-		    }
-
-		    // swap
-		    // No-Throw Guarantee
-		    void swap(VSArray & other) noexcept
-				{
-				    // TODO: Write this!!!
-				}
-
-		// ***** VSArray: data members *****
-		private:
-
-		    size_type    _capacity;  // Size of our allocated array
-		    size_type    _size;      // Size of client's data
-		    value_type * _tvsarray;      // Pointer to array
-
-		};  // End class TVSArray
-
-
-		#endif //#ifndef FILE_TVSARRAY_H_INCLUDED
+#endif //#ifndef FILE_TVSARRAY_H_INCLUDED
