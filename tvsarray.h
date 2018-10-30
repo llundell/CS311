@@ -15,6 +15,7 @@
 // For std::size_t
 #include <algorithm>
 using std::copy;
+using std::swap;
 // For std::max; std::swap;
 
 // *********************************************************************
@@ -197,7 +198,10 @@ public:
 			throw;
 			}
 			std::swap(_data, newData);
+			_size = newSize;
+			_capacity = newCapacity;
 			delete [] newData;
+
 		}
 }
 
@@ -239,7 +243,7 @@ public:
 	void swap(TVSArray & other) noexcept
 	{
 		using std::swap;
-		swap(_size, other._capacity);
+		swap(_capacity, other._capacity);
 		swap(_size, other._size);
 		swap(_data, other._data);
 	}
