@@ -173,12 +173,13 @@ public:
 	// ??? Guarantee
 	void resize(size_type newSize)
 	{
-		if (newSize <= _size) {
+		if (newSize <= _capacity) {
 			_size = newSize;
 		}
 		else {
 			size_type newCapacity = _size * 2;
-			if (newCapacity < newSize) {
+
+			if (newCapacity <= newSize) {
 				newCapacity = newSize;
 			}
 			if (newCapacity < DEFAULT_CAP) {
