@@ -211,7 +211,11 @@ public:
 	iterator insert(iterator pos,
 	const value_type & item)
 	{
-
+		size_type index = pos - begin();
+		resize(size()+1);
+		pos = begin() + index;
+		std::rotate(pos, end()-1, end());
+		*pos = item;
 		return pos;  // Dummy return
 	}
 
@@ -219,7 +223,7 @@ public:
 	// ??? Guarantee
 	iterator erase(iterator pos)
 	{
-		
+
 
 
 		return pos;  // Dummy return
