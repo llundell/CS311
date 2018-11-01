@@ -1,7 +1,7 @@
 //  tvsarray.h
 //  Laura Lundell & Khan Howe
 //  Started: 10/27/18
-// Updated: 10/27/18
+// Updated: 11/1/18
 // Header for class Templated Very Smart Array Class
 /* Sources used:
 * Project 2 Code, Dr. Chappell's vsarray.cpp, vsarray.h,
@@ -15,7 +15,7 @@
 // For std::size_t
 #include <algorithm>
 using std::copy;
-// For std::max; std::swap;
+// For std::max; std::swap; std::rotate
 
 // *********************************************************************
 // Template class TVSArray
