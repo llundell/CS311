@@ -1,11 +1,11 @@
-//  tvsarray.h
-//  Laura Lundell & Khan Howe
-//  Started: 10/27/18
-// Updated: 11/1/18
-// Header for class Templated Very Smart Array Class
-/* Sources used:
-* Project 2 Code, Dr. Chappell's vsarray.cpp, vsarray.h,
-*		slides on Project 5, and ssarray.h from Project 2
+//	tvsarray.h
+//	Laura Lundell & Khan Howe
+//	Started: 10/27/18
+//	Updated: 11/1/18
+//	Header for class Templated Very Smart Array Class
+/*	Sources used:
+* 		Project 2 Code, Dr. Chappell's vsarray.cpp, vsarray.h,
+*			slides on Project 5, and ssarray.h from Project 2
 */
 
 #ifndef FILE_TVSARRAY_H_INCLUDED
@@ -97,12 +97,16 @@ public:
 	// Copy assignment operator
 	// Strong Guarantee
 	// Pre-condition: valid TVSArray object pass in
-	// Post-condition:
+	// Post-condition: If the TVSArray Objects are not equal,
+	// 	then swap values
 	TVSArray & operator=(const TVSArray & other)
 	{
-		// TODO: check for sameness
-		TVSArray temp(other);
-		swap(temp);
+		// check for self-assignment
+		if (this != & other)
+		{
+			TVSArray temp(other);
+			swap(temp);
+		}
 		return *this;
 	}
 
@@ -238,11 +242,13 @@ public:
 	const value_type & item)
 	{
 		size_type index = pos - begin();
+		// resize to create empty space at the end of array
 		resize(size()+1);
 		pos = begin() + index;
 		std::rotate(pos, end()-1, end());
 		*pos = item;
 		return pos;  // Dummy return
+
 	}
 
 	// erase()
