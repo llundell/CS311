@@ -15,7 +15,6 @@
 // For std::size_t
 #include <algorithm>
 using std::copy;
-using std::swap;
 // For std::max; std::swap;
 
 // *********************************************************************
@@ -84,6 +83,7 @@ public:
 	}
 	// Move ctor
 	// No-Throw Guarantee
+
 	TVSArray(TVSArray && other) noexcept
 				:_capacity(other._capacity),
 				_size(other._size),
@@ -98,16 +98,18 @@ public:
 	// ??? Guarantee
 	TVSArray & operator=(const TVSArray & other)
 	{
-		return *this;  // Dummy return
-	// TODO: Write this!!!
+		TVSArray temp(other);
+		swap(temp);
+		return *this;
 	}
 
 	// Move assignment operator
 	// No-Throw Guarantee
+	// ?? DO we need to create a new array?
 	TVSArray & operator=(TVSArray && other) noexcept
 	{
-		return *this;  // Dummy return
-	// TODO: Write this!!!
+		swap(other);
+		return *this;
 	}
 
 	// Dctor
@@ -119,7 +121,6 @@ public:
 
 	// ***** TVSArray: general public operators *****
 public:
-
 	// operator[] - non-const & const
 	// No-Throw Guarantee
 	value_type & operator[](size_type index)
@@ -210,14 +211,17 @@ public:
 	iterator insert(iterator pos,
 	const value_type & item)
 	{
+
 		return pos;  // Dummy return
-		// TODO: Write this!!!
 	}
 
 	// erase
 	// ??? Guarantee
 	iterator erase(iterator pos)
 	{
+		
+
+
 		return pos;  // Dummy return
 		// TODO: Write this!!!
 	}
