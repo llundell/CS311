@@ -35,7 +35,6 @@ public:
 	using size_type = std::size_t;
 	// value_type: type of data items
 	using value_type = ValType;
-
 	// iterator, const_iterator: random-access iterator types
 	using iterator = value_type *;
 	using const_iterator = const value_type *;
@@ -51,19 +50,20 @@ public:
 	// Default constructor & constructor from size
 	// Strong Guarantee
 	// Pre-conditions: none
-	// Post-condition: creates new array of type ValType with 0 items
+	// Post-condition: creates new array of type ValType with size
 	explicit TVSArray(size_type size = 0) :
-	_capacity(std::max(size, size_type(DEFAULT_CAP))),
-	_size(size),
-	_data(new value_type[_capacity])
+				_capacity(std::max(size * 2, size_type(DEFAULT_CAP))),
+				_size(size),
+				// dynamic allocation will not happen if memory isn't available
+				_data(new value_type[_capacity])
 	{}
 
 	// Copy constructor
 	// Strong Guarantee
 	// Pre-condition: valid TVSArray object passed in
 	// Post-condition: new TVSArray object is created
-	TVSArray(const TVSArray & other)
-				:_capacity(other._capacity),
+	TVSArray(const TVSArray & other):
+				_capacity(other._capacity),
 				_size(other._size),
 				_data(new value_type[other._capacity])
 	{
@@ -84,8 +84,8 @@ public:
 	// No-Throw Guarantee
 	// Pre-condition: valid TVSArray object passed in
 	// Post-condition: the old object is no longer usable
-	TVSArray(TVSArray && other) noexcept
-				:_capacity(other._capacity),
+	TVSArray(TVSArray && other) noexcept:
+				_capacity(other._capacity),
 				_size(other._size),
 				_data(other._data)
 	{
@@ -198,38 +198,20 @@ public:
 	// resize()
 	// Strong Guarantee
 	// Pre-condition: none
-	// Post-condition: resizes TVSArray to new given size,
-	//	throws exception and deletes newData if copy fails,
+	// Post-condition: resizes TVSArray to new given size
 	void resize(size_type newSize)
 	{
 		if (newSize <= _capacity) {
 			_size = newSize;
 		}
 		else {
-			size_type newCapacity = _size * 2;
+			// Create new temporary with new size
+			// if this throws, nothing happens
+			TVSArray temp(newSize);
 
-			if (newCapacity <= newSize) {
-				newCapacity = newSize;
-			}
-			if (newCapacity < DEFAULT_CAP) {
-				newCapacity = DEFAULT_CAP;
-			}
-
-			auto newData = new value_type[newCapacity];
-
-			try {
-				std::copy(begin(), end(), newData);
-			}
-			catch(...)
-			{
-			delete [] newData;
-			throw;
-			}
-			std::swap(_data, newData);
-			_size = newSize;
-			_capacity = newCapacity;
-			delete [] newData;
-
+			// if copy fails, data isn't modified so can still offer Strong Guarantee
+			std::copy(begin(), end(), temp.begin());
+			swap(temp);
 		}
 }
 
@@ -247,7 +229,7 @@ public:
 		pos = begin() + index;
 		std::rotate(pos, end()-1, end());
 		*pos = item;
-		return pos;  // Dummy return
+		return pos;
 
 	}
 
@@ -260,12 +242,12 @@ public:
 	{
 		std::rotate(pos, pos+1, end());
 		resize(size()-1);
-		return pos;  // Dummy return
+		return pos;
 	}
 
 	// push_back
 	// InsertEnd operation.
-	// ???? Guarantee
+	// BasicGuarantee
 	// Pre-condition: valid item reference
 	// Post-condition: inserts item at the end of the array
 	void push_back(const value_type & item)
@@ -275,7 +257,7 @@ public:
 
 	// pop_back()
 	// RemoveEnd operation.
-	// ??? Guarantee
+	// Basic Guarantee
 	// Pre-condition: none
 	// Post-condition: erases item at the end of the array
 	void pop_back()
@@ -289,10 +271,9 @@ public:
 	// Post-condition: swaps all private data member values
 	void swap(TVSArray & other) noexcept
 	{
-		using std::swap;
-		swap(_capacity, other._capacity);
-		swap(_size, other._size);
-		swap(_data, other._data);
+		std::swap(_capacity, other._capacity);
+		std::swap(_size, other._size);
+		std::swap(_data, other._data);
 	}
 
 	// ***** TVSArray: data members *****
