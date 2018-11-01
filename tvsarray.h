@@ -223,11 +223,9 @@ public:
 	// ??? Guarantee
 	iterator erase(iterator pos)
 	{
-
-
-
+		std::rotate(pos, pos+1, end());
+		resize(size()-1);
 		return pos;  // Dummy return
-		// TODO: Write this!!!
 	}
 
 	// push_back
