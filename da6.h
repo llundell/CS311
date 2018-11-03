@@ -8,7 +8,11 @@
 /*	Sources used:
 *
 */
-#include "llnode2.h;
+
+#ifndef FILE_DA6_H_INCLUDED
+#define FILE_DA6_H_INCLUDED
+
+#include "llnode2.h";
 #include <memory>; // for shared_pointer
 #include <utility>; // for std::pair
 
@@ -101,4 +105,6 @@ The passed function is called on each key-value pair in the dataset.
 	{
 		return null;
 	}
-} // End class ListMap
+}; // End class ListMap
+
+#endif //#ifndef FILE_DA6_H_INCLUDED
