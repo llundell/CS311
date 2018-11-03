@@ -10,6 +10,7 @@
 */
 #include "llnode2.h;
 #include <memory>; // for shared_pointer
+#include <utility>; // for std::pair
 
 // Exercise A
 template<typename ValType>
@@ -22,38 +23,41 @@ void reverseList(shared_ptr<LLNode2<ValType>> & head)
 
 
 // Exercise B
-template<typename KeyType, typename DataType>
+template<typename KeyType, typename ValType>
 class ListMap
 {
 	public:
 
-		typename node = shared_ptr<LLNode2<KVTYPE>>;
+		std::pair KVTYPE = pair(KeyType T1, ValType T2);
 
+		typename DATA_TYPE* = shared_ptr<LLNode2<KVTYPE>>;
 
-
-		explicit ListMap()
-		    {}
-
-		    ~ListMap()
-		    {
-		    }
-
-    //Copy-Constructor
-    ListMap(const ListMap & other) = delete;
-    //Move-Constructor
-    ListMap(ListMap && other) = delete;
-    //Copy-Assignment
-    ListMap & operator=(const ListMap & other) = delete;
-    //Move-Assignment
-    ListMap & operator=(const ListMap && other) = delete;
 
 
 
 
 // 	Default ctor. Creates an empty dataset.
+	explicit ListMap()
+	    {}
 
-// Dctor. As usual.
-// Function size. No parameters. Returns an integer of an appropriate type giving the number of key-value pairs in the dataset.
+  ~ListMap()
+  {
+		delete
+  }
+
+  //Copy-Constructor
+  ListMap(const ListMap & other) = delete;
+  //Move-Constructor
+  ListMap(ListMap && other) = delete;
+  //Copy-Assignment
+  ListMap & operator=(const ListMap & other) = delete;
+  //Move-Assignment
+  ListMap & operator=(const ListMap && other) = delete;
+
+
+
+	// Dctor. As usual.
+	// Function size. No parameters. Returns an integer of an appropriate type giving the number of key-value pairs in the dataset.
 	int size()
 	{
 		return 0;
