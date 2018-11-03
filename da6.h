@@ -11,14 +11,14 @@
 
 #ifndef FILE_DA6_H_INCLUDED
 #define FILE_DA6_H_INCLUDED
+#include "llnode2.h"
+#include <memory> // for shared_pointer
+#include <utility> // for std::pair
 
-#include "llnode2.h";
-#include <memory>; // for shared_pointer
-#include <utility>; // for std::pair
 
 // Exercise A
 template<typename ValType>
-void reverseList(shared_ptr<LLNode2<ValType>> & head)
+void reverseList(std::shared_ptr<LLNode2<ValType>> & head)
 {
 
 
@@ -32,9 +32,11 @@ class ListMap
 {
 	public:
 
-		std::pair KVTYPE = pair(KeyType T1, ValType T2);
+		std::pair <KeyType,ValType> KVTYPE;
 
-		typename DATA_TYPE* = shared_ptr<LLNode2<KVTYPE>>;
+		// std::pair KVTYPE = pair(auto T1, auto T2);
+
+		using DATA_TYPE = std::shared_ptr<LLNode2<KVTYPE>>;
 
 
 
@@ -46,7 +48,6 @@ class ListMap
 
   ~ListMap()
   {
-		delete
   }
 
   //Copy-Constructor
@@ -75,9 +76,9 @@ class ListMap
 onst ListMap and DATA_TYPE * for a non-const ListMap. If the key lies in the dataset,
 then the returned pointer points to the associated value. Otherwise, the returned pointer is nullptr.
 */
-	ValType* find()
+	const ValType * find(KeyType key)
 	{
-		return nullptr;
+		return 0;
 	}
 
 /* Function insert. Two parameters: a key and an associated value. Returns nothing.
@@ -85,25 +86,22 @@ If an equal key does not lie in the dataset, then the key-value pair is inserted
 If an equal key does lie in the dataset, then the existing key-value pair is replaced with that given.
 
 */
-	void insert()
+	void insert(KeyType key, ValType val)
 	{
-		return null;
 	}
-/* Function erase. One parameter: a key. Returns nothing. If an equal key lies in the dataset,
-then that key-value pair is removed. If an equal key does not lie in the dataset, then the function does nothing.
-	void erase()
-*/
+// Function erase. One parameter: a key. Returns nothing. If an equal key lies in the dataset,
+//then that key-value pair is removed. If an equal key does not lie in the dataset, then the function does nothing.
+	void erase(KeyType key)
 	{
-		return null;
 	}
 
 /* Function traverse. One parameter: a function or function object (its type can simply be a template parameter).
 Returns nothing. The passed function is expected to take two parameters, key type and data type, and return nothing.
 The passed function is called on each key-value pair in the dataset.
 */
-	void traverse()
+	template<typename Func>
+	void traverse(Func f)
 	{
-		return null;
 	}
 }; // End class ListMap
 
