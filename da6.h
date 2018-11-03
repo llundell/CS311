@@ -17,11 +17,12 @@ void reverseList(shared_ptr<LLNode2<ValType>> & head)
 {
 
 
+
 }
 
 
 // Exercise B
-template<typename KVType>
+template<typename KeyType, typename DataType>
 class ListMap
 {
 	public:
