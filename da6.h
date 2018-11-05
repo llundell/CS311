@@ -32,11 +32,7 @@ class ListMap
 {
 	public:
 
-		std::pair <KeyType,ValType> KVTYPE;
-
-		// std::pair KVTYPE = pair(auto T1, auto T2);
-
-		using DATA_TYPE = std::shared_ptr<LLNode2<KVTYPE>>;
+		using DATA_TYPE = std::shared_ptr<LLNode2<std::pair<KeyType,ValType>>>;
 
 
 
@@ -63,12 +59,12 @@ class ListMap
 
 	// Dctor. As usual.
 	// Function size. No parameters. Returns an integer of an appropriate type giving the number of key-value pairs in the dataset.
-	int size()
+	int size() const
 	{
 		return 0;
 	}
 // Function empty. No parameters. Returns a bool indicating whether there are no key-value pairs in the dataset.
-	bool empty()
+	bool empty() const
 	{
 		return true;
 	}
@@ -76,7 +72,7 @@ class ListMap
 onst ListMap and DATA_TYPE * for a non-const ListMap. If the key lies in the dataset,
 then the returned pointer points to the associated value. Otherwise, the returned pointer is nullptr.
 */
-	const ValType * find(KeyType key)
+	ValType * find(KeyType key) const
 	{
 		return 0;
 	}
