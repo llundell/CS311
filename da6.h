@@ -56,17 +56,27 @@ class ListMap
   ListMap & operator=(const ListMap && other) = delete;
 
 
-
-	// Dctor. As usual.
 	// Function size. No parameters. Returns an integer of an appropriate type giving the number of key-value pairs in the dataset.
-	int size() const
+	size_t size() const
 	{
-		return 0;
+		auto p = _head;  // Iterates through list
+	    size_t n = 0;   // Number of nodes so far
+	    while (p)
+	    {
+	        p = p->_next;
+	        ++n;
+	    }
+	    return n;
 	}
 // Function empty. No parameters. Returns a bool indicating whether there are no key-value pairs in the dataset.
 	bool empty() const
 	{
-		return true;
+		if (size() == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 /* Function find. One parameter: a key. Returns const DATA_TYPE * for a c
 onst ListMap and DATA_TYPE * for a non-const ListMap. If the key lies in the dataset,
@@ -74,7 +84,19 @@ then the returned pointer points to the associated value. Otherwise, the returne
 */
 	ValType * find(KeyType key) const
 	{
-		return 0;
+		auto p = _head;
+		while(p)
+		{
+			KeyType currentKey = std::get<0>(p->_data);
+			if (currentKey == key) {
+				return &(std::get<1>(p->_data));
+			}
+			else {
+				p = p->_next;
+			}
+		}
+		return nullptr;
+
 	}
 
 /* Function insert. Two parameters: a key and an associated value. Returns nothing.
@@ -99,6 +121,10 @@ The passed function is called on each key-value pair in the dataset.
 	void traverse(Func f)
 	{
 	}
+
+
+private:
+	DATA_TYPE _head;
 }; // End class ListMap
 
 #endif //#ifndef FILE_DA6_H_INCLUDED
