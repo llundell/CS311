@@ -20,8 +20,15 @@
 template<typename ValType>
 void reverseList(std::shared_ptr<LLNode2<ValType>> & head)
 {
+	if(head != nullptr)
+	{
+		std::shared_ptr<LLNode2<ValType>> current = head;
+		std::shared_ptr<LLNode2<ValType>> oldHead;
+		std::shared_ptr<LLNode2<ValType>> newHead;
 
 
+
+	}
 
 }
 
@@ -39,8 +46,8 @@ class ListMap
 
 
 // 	Default ctor. Creates an empty dataset.
-	explicit ListMap()
-	    {}
+	explicit ListMap(): _head(nullptr)
+	{}
 
   ~ListMap()
   {
@@ -106,11 +113,14 @@ If an equal key does lie in the dataset, then the existing key-value pair is rep
 */
 	void insert(KeyType key, ValType val)
 	{
+		auto result = find(key);
+
 	}
 // Function erase. One parameter: a key. Returns nothing. If an equal key lies in the dataset,
 //then that key-value pair is removed. If an equal key does not lie in the dataset, then the function does nothing.
 	void erase(KeyType key)
 	{
+
 	}
 
 /* Function traverse. One parameter: a function or function object (its type can simply be a template parameter).
@@ -120,6 +130,7 @@ The passed function is called on each key-value pair in the dataset.
 	template<typename Func>
 	void traverse(Func f)
 	{
+
 	}
 
 
