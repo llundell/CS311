@@ -16,24 +16,34 @@
 #include <utility> // for std::pair
 
 
-// Exercise A
+// Exercise A reverseList
+// Reversing a Linked List
+// Pre-conditions: valid shared pointer to a Linked List
+// No-throw Guarantee
 template<typename ValType>
 void reverseList(std::shared_ptr<LLNode2<ValType>> & head)
 {
 	if(head != nullptr)
 	{
-		std::shared_ptr<LLNode2<ValType>> current = head;
 		std::shared_ptr<LLNode2<ValType>> oldHead;
 		std::shared_ptr<LLNode2<ValType>> newHead;
 
-
+		while(head != nullptr)
+		{
+			oldHead = head->_next;
+			head->_next = newHead;
+			newHead = head;
+			head = oldHead;
+		}
+		head = newHead;
 
 	}
-
+	return;
 }
 
 
-// Exercise B
+// Exercise B class ListMap
+// 
 template<typename KeyType, typename ValType>
 class ListMap
 {
