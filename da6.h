@@ -46,7 +46,7 @@ class ListMap
 
 
 // 	Default ctor. Creates an empty dataset.
-	explicit ListMap(): _head(nullptr)
+	ListMap() : _head()
 	{}
 
   ~ListMap()
@@ -89,7 +89,24 @@ class ListMap
 onst ListMap and DATA_TYPE * for a non-const ListMap. If the key lies in the dataset,
 then the returned pointer points to the associated value. Otherwise, the returned pointer is nullptr.
 */
-	ValType * find(KeyType key) const
+	const ValType * find(KeyType key) const
+	{
+		auto p = _head;
+		while(p)
+		{
+			KeyType currentKey = std::get<0>(p->_data);
+			if (currentKey == key) {
+				return &(std::get<1>(p->_data));
+			}
+			else {
+				p = p->_next;
+			}
+		}
+		return nullptr;
+
+	}
+
+	ValType * find(KeyType key)
 	{
 		auto p = _head;
 		while(p)
@@ -113,14 +130,39 @@ If an equal key does lie in the dataset, then the existing key-value pair is rep
 */
 	void insert(KeyType key, ValType val)
 	{
-		auto result = find(key);
+		auto pos = find(key);
+		if (pos) {
+			(*pos)= val;
+		}
+		else {
 
+			_head = std::make_shared<LLNode2<std::pair<KeyType,ValType>>>(std::make_pair(key, val), _head);
+		}
 	}
 // Function erase. One parameter: a key. Returns nothing. If an equal key lies in the dataset,
 //then that key-value pair is removed. If an equal key does not lie in the dataset, then the function does nothing.
 	void erase(KeyType key)
 	{
+		//TODO try some debugging using cout.
+		auto p = _head;
+		auto previous = &_head;
+		bool found = false;
+		// cout << "Calling While Loop" << endl;
+		while(not found)
+		{
+			// cout << "Iteration in while Loop" << endl;
 
+			KeyType currentKey = std::get<0>(p->_data);
+			if (currentKey == key) {
+				found = true;
+				*previous = p->_next;
+				p->_next = nullptr;
+			}
+			else {
+				previous = &((*previous)->_next);
+				p = *previous;
+			}
+		}
 	}
 
 /* Function traverse. One parameter: a function or function object (its type can simply be a template parameter).
@@ -130,7 +172,11 @@ The passed function is called on each key-value pair in the dataset.
 	template<typename Func>
 	void traverse(Func f)
 	{
-
+		auto p = _head;
+		while(p) {
+			f(p->_data.first, p->_data.second);
+			p = p->_next;
+		}
 	}
 
 
