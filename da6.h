@@ -6,7 +6,8 @@
 //	Exercise A: Reversing a linked list2
 //	Exercise B: Associative Dataset Class Template
 /*	Sources used:
-*
+*			Dr. Chappell's slides on Project 6
+*			& assignment instructions for post-conditions
 */
 
 #ifndef FILE_DA6_H_INCLUDED
@@ -28,7 +29,7 @@ void reverseList(std::shared_ptr<LLNode2<ValType>> & head)
 		std::shared_ptr<LLNode2<ValType>> oldHead;
 		std::shared_ptr<LLNode2<ValType>> newHead;
 
-		while(head != nullptr)
+		while(head)
 		{
 			oldHead = head->_next;
 			head->_next = newHead;
@@ -42,10 +43,14 @@ void reverseList(std::shared_ptr<LLNode2<ValType>> & head)
 }
 
 
-// Exercise B class ListMap
-// Templated class
-// Invariants:
-//
+//	*********************************************************************
+//	Template class ListMap
+//	*********************************************************************
+//	Exercise B
+//	Templated class
+//	Invariants:
+//	Requirements on types:
+// 	ValType and KeyType must be valid C++ types
 template<typename KeyType, typename ValType>
 class ListMap
 {
@@ -53,22 +58,22 @@ class ListMap
 
 		using DATA_TYPE = std::shared_ptr<LLNode2<std::pair<KeyType,ValType>>>;
 
-
-
-
-
+// ***** ListMap: ctors, dctor, op= *****
+	public:
 // Default ctor. Creates an empty dataset.
 // Strong guarantee
+// Pre-conditions: none
+// Post-condition: sets _head pointer to nullptr
 	ListMap() : _head()
 	{}
 
 // Destructor
 // No-throw guarantee
+// No pre- or post-conditions
   ~ListMap()
-  {
-  }
+  {}
 
-	/*** Remaining 4 Constructors ***/
+	/*** Remaining 4 Constructors deleted ***/
   //Copy-Constructor
   ListMap(const ListMap & other) = delete;
   //Move-Constructor
@@ -78,8 +83,13 @@ class ListMap
   //Move-Assignment
   ListMap & operator=(const ListMap && other) = delete;
 
-
-	// Function size. No parameters. Returns an integer of an appropriate type giving the number of key-value pairs in the dataset.
+// ***** ListMap: general public functions *****
+public:
+	//	size(). No parameters. Returns an integer of an appropriate type g
+	//	Pre-conditions: none
+	//	Post-condition: returns integer of an appropriate
+	//		type giving the number of key-value pairs in the dataset.
+	//	Strong Guarantee
 	size_t size() const
 	{
 		auto p = _head;  // Iterates through list
@@ -91,7 +101,11 @@ class ListMap
 	    }
 	    return n;
 	}
-// Function empty. No parameters. Returns a bool indicating whether there are no key-value pairs in the dataset.
+//	empty()
+//	Pre-conditions: none
+//	Post-conditions: Returns a bool indicating
+//		whether there are no key-value pairs in the dataset.
+//	Strong Guarantee
 	bool empty() const
 	{
 		if (size() == 0) {
@@ -101,35 +115,37 @@ class ListMap
 			return false;
 		}
 	}
-/* Function find. One parameter: a key. Returns const DATA_TYPE * for a c
-onst ListMap and DATA_TYPE * for a non-const ListMap. If the key lies in the dataset,
-then the returned pointer points to the associated value. Otherwise, the returned pointer is nullptr.
-*/
+//	find() const
+//	Pre-conditions: none
+//	Post-conditions: Returns const pointer to the value, given the input KeyType
+//		If key is not found, nullptr is returned
+//	Strong Guarantee
 	const ValType * find(KeyType key) const
 	{
 		auto p = _head;
 		while(p)
 		{
-			KeyType currentKey = std::get<0>(p->_data);
+			KeyType currentKey = p->_data.first;
 			if (currentKey == key) {
-				return &(std::get<1>(p->_data));
+				return &(p->_data.second);
 			}
 			else {
 				p = p->_next;
 			}
 		}
 		return nullptr;
-
 	}
 
+//	find() non-const
+// (same as above)
 	ValType * find(KeyType key)
 	{
 		auto p = _head;
 		while(p)
 		{
-			KeyType currentKey = std::get<0>(p->_data);
+			KeyType currentKey = p->_data.first;
 			if (currentKey == key) {
-				return &(std::get<1>(p->_data));
+				return &(p->_data.second);
 			}
 			else {
 				p = p->_next;
@@ -139,11 +155,13 @@ then the returned pointer points to the associated value. Otherwise, the returne
 
 	}
 
-/* Function insert. Two parameters: a key and an associated value. Returns nothing.
-If an equal key does not lie in the dataset, then the key-value pair is inserted.
-If an equal key does lie in the dataset, then the existing key-value pair is replaced with that given.
-
-*/
+//	insert()
+//	Pre-conditions: none
+//	Post-conditions:
+//		Insert key-value pair if equal key doesn't lie in dataset
+//		Replaces existing key-value pair with
+//		given pair if an equal key does lie in the dataset
+//	Strong Guarantee
 	void insert(KeyType key, ValType val)
 	{
 		auto pos = find(key);
@@ -151,24 +169,25 @@ If an equal key does lie in the dataset, then the existing key-value pair is rep
 			(*pos)= val;
 		}
 		else {
-
 			_head = std::make_shared<LLNode2<std::pair<KeyType,ValType>>>(std::make_pair(key, val), _head);
 		}
 	}
-// Function erase. One parameter: a key. Returns nothing. If an equal key lies in the dataset,
-//then that key-value pair is removed. If an equal key does not lie in the dataset, then the function does nothing.
+
+//	erase()
+//	Pre-conditions: none
+//	Post-conditions: If an equal key lies in the dataset,
+//		then that key-value pair is removed by deleting the link
+//		The previous node points to the node after the input
+//		Otherwise, the function does nothing.
+//	Strong Guarantee
 	void erase(KeyType key)
 	{
-		//TODO try some debugging using cout.
 		auto p = _head;
 		auto previous = &_head;
 		bool found = false;
-		// cout << "Calling While Loop" << endl;
 		while(not found)
 		{
-			// cout << "Iteration in while Loop" << endl;
-
-			KeyType currentKey = std::get<0>(p->_data);
+			KeyType currentKey = p->_data.first;
 			if (currentKey == key) {
 				found = true;
 				*previous = p->_next;
@@ -181,10 +200,10 @@ If an equal key does lie in the dataset, then the existing key-value pair is rep
 		}
 	}
 
-/* Function traverse. One parameter: a function or function object (its type can simply be a template parameter).
-Returns nothing. The passed function is expected to take two parameters, key type and data type, and return nothing.
-The passed function is called on each key-value pair in the dataset.
-*/
+// traverse()
+// Pre-conditions: must meet pre-conditions of function passed
+// Post-conditions: completes passed operation on given values in linked list
+// Basic-Guarantee (function could throw)
 	template<typename Func>
 	void traverse(Func f)
 	{
@@ -195,7 +214,7 @@ The passed function is called on each key-value pair in the dataset.
 		}
 	}
 
-
+	// ***** ListMap: data members *****
 private:
 	DATA_TYPE _head;
 }; // End class ListMap
