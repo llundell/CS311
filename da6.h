@@ -43,7 +43,9 @@ void reverseList(std::shared_ptr<LLNode2<ValType>> & head)
 
 
 // Exercise B class ListMap
-// 
+// Templated class
+// Invariants:
+//
 template<typename KeyType, typename ValType>
 class ListMap
 {
@@ -55,14 +57,18 @@ class ListMap
 
 
 
-// 	Default ctor. Creates an empty dataset.
+// Default ctor. Creates an empty dataset.
+// Strong guarantee
 	ListMap() : _head()
 	{}
 
+// Destructor
+// No-throw guarantee
   ~ListMap()
   {
   }
 
+	/*** Remaining 4 Constructors ***/
   //Copy-Constructor
   ListMap(const ListMap & other) = delete;
   //Move-Constructor
