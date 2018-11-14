@@ -44,5 +44,67 @@ void treesort(FDIter first, FDIter last)
     move(buff.begin(), buff.end(), first);
 }
 
+template <typename ValType>
+struct BSTreeNode
+{
+    ValType _data;
+    std::shared_ptr<BSTreeNode> _leftChild;
+    std::shared_ptr<BSTreeNode> _rightChild;
+
+    explicit BSTreeNode(const ValType & data,
+                        std::shared_ptr<BSTreeNode> leftChild = nullptr,
+                        std::shared_ptr<BSTreeNode> rightChild = nullptr)
+        :_data(data),
+        _leftChild(leftChild),
+        _rightChild(rightChild)
+    {}
+
+    ~BSTreeNode() = default;
+
+    BSTreeNode & operator<(const BSTreeNode & other)
+    {
+        //TODO Write function
+    }
+};
+
+template <typename ValType>
+class BSTree
+{
+    using DATA_TYPE = std::shared_ptr<BSTreeNode<ValType>>;
+private:
+    DATA_TYPE _root;
+
+public:
+    BSTree() :_root()
+    {}
+
+    /*** Remaining 4 Constructors deleted ***/
+  //Copy-Constructor
+  BSTree(const BSTree & other) = delete;
+  //Move-Constructor
+  BSTree(BSTree && other) = delete;
+  //Copy-Assignment
+  BSTree & operator=(const BSTree & other) = delete;
+  //Move-Assignment
+  BSTree & operator=(const BSTree && other) = delete;
+
+
+  void insert(ValType val)
+  {
+      //TODO Write function
+  }
+
+
+  //Needs to be an inorder traversal
+  template <typename func>
+  void traverse()
+  {
+      //TODO Write function
+  }
+
+
+
+};
+
 
 #endif //#ifndef FILE_TREESORT_H_INCLUDED
