@@ -22,28 +22,6 @@ using std::vector;
 #include <iterator>
 using std::distance;
 
-// treesort
-// Sort a given range using Treesort.
-// Pre:
-//     ???
-// Requirements on Types:
-//     ???
-// Exception safety guarantee:
-//     ???
-template<typename FDIter>
-void treesort(FDIter first, FDIter last)
-{
-    // ValType is the type that FDIter points to
-    using ValType = typename iterator_traits<FDIter>::value_type;
-
-    // THE FOLLOWING IS DUMMY CODE. IT WILL PASS ALL TESTS, BUT IT DOES
-    // NOT MEET THE REQUIREMENTS OF THE PROJECT.
-    vector<ValType> buff(distance(first, last));
-    move(first, last, buff.begin());
-    stable_sort(buff.begin(), buff.end());
-    move(buff.begin(), buff.end(), first);
-}
-
 template <typename ValType>
 struct BSTreeNode
 {
@@ -58,7 +36,6 @@ struct BSTreeNode
         _leftChild(leftChild),
         _rightChild(rightChild)
     {}
-
     ~BSTreeNode() = default;
 
     BSTreeNode & operator<(const BSTreeNode & other)
@@ -67,44 +44,68 @@ struct BSTreeNode
     }
 };
 
-template <typename ValType>
-class BSTree
+// Insert()
+// Takes a smart pointer by reference and the item to be inserted
+template<typename ValType>
+void insert(std::shared_ptr<BSTreeNode<ValType>> & head, ValType val)
 {
-    using DATA_TYPE = std::shared_ptr<BSTreeNode<ValType>>;
-private:
-    DATA_TYPE _root;
+	// if pointer is empty, set it to point to a new node
+	if (head == nullptr)
+	{
+		head = std::make_shared<BSTreeNode<ValType>>(val);
+		return;
+	}
 
-public:
-    BSTree() :_root()
-    {}
+	if (val < head->_data)
+	{
+		insert(head->_leftChild, val);
+	}
+	else
+	{
+		insert(head->_rightChild, val);
+	}
 
-    /*** Remaining 4 Constructors deleted ***/
-  //Copy-Constructor
-  BSTree(const BSTree & other) = delete;
-  //Move-Constructor
-  BSTree(BSTree && other) = delete;
-  //Copy-Assignment
-  BSTree & operator=(const BSTree & other) = delete;
-  //Move-Assignment
-  BSTree & operator=(const BSTree && other) = delete;
+}
 
+//Needs to be an inorder traversal
+// Takes a pointer to a tree and an iterator by reference
+// If the pointer is null, return.
+//
+template<typename ValType, typename FDIter>
+void traverse(std::shared_ptr<BSTreeNode<ValType>> & head,
+					FDIter & iter)
+{
+		if (head == nullptr)
+			return;
 
-  void insert(ValType val)
-  {
-      //TODO Write function
-  }
+		traverse(head->_leftChild, iter);
+		*iter++ = head->_data;
+		traverse(head->_rightChild, iter);
+}
 
+// treesort
+// Sort a given range using Treesort.
+// Pre:
+//     ???
+// Requirements on Types:
+//     ???
+// Exception safety guarantee:
+//     ???
+template<typename FDIter>
+void treesort(FDIter first, FDIter last)
+{
+    // ValType is the type that FDIter points to
+    using ValType = typename iterator_traits<FDIter>::value_type;
 
-  //Needs to be an inorder traversal
-  template <typename func>
-  void traverse()
-  {
-      //TODO Write function
-  }
+		// Create new binary tree with nullptr at head
+		std::shared_ptr<BSTreeNode<ValType>> head = nullptr;
+		for (FDIter itemToInsert = first; itemToInsert != last; ++itemToInsert)
+		{
+			insert(head, *itemToInsert);
+		}
 
-
-
-};
+		traverse(head, first);
+}
 
 
 #endif //#ifndef FILE_TREESORT_H_INCLUDED
