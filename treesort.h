@@ -44,44 +44,67 @@ struct BSTreeNode
     }
 };
 
-// Insert()
-// Takes a smart pointer by reference and the item to be inserted
-template<typename ValType>
-void insert(std::shared_ptr<BSTreeNode<ValType>> & head, ValType val)
+
+template <typename ValType>
+class BSTree
 {
-	// if pointer is empty, set it to point to a new node
-	if (head == nullptr)
-	{
-		head = std::make_shared<BSTreeNode<ValType>>(val);
-		return;
-	}
+    using DATA_TYPE = std::shared_ptr<BSTreeNode<ValType>>;
+private:
+    DATA_TYPE _root;
+ public:
+    BSTree() :_root()
+    {}
+     /*** Remaining 4 Constructors deleted ***/
+  //Copy-Constructor
+  BSTree(const BSTree & other) = delete;
+  //Move-Constructor
+  BSTree(BSTree && other) = delete;
+  //Copy-Assignment
+  BSTree & operator=(const BSTree & other) = delete;
+  //Move-Assignment
+  BSTree & operator=(const BSTree && other) = delete;
 
-	if (val < head->_data)
-	{
-		insert(head->_leftChild, val);
-	}
-	else
-	{
-		insert(head->_rightChild, val);
-	}
 
-}
-
-//Needs to be an inorder traversal
-// Takes a pointer to a tree and an iterator by reference
-// If the pointer is null, return.
-//
-template<typename ValType, typename FDIter>
-void traverse(std::shared_ptr<BSTreeNode<ValType>> & head,
-					FDIter & iter)
-{
+	// Insert()
+	// Takes a smart pointer by reference and the item to be inserted
+	void insert(std::shared_ptr<BSTreeNode<ValType>> & head, ValType val)
+	{
+		// if pointer is empty, set it to point to a new node
 		if (head == nullptr)
+		{
+			head = std::make_shared<BSTreeNode<ValType>>(val);
 			return;
+		}
 
-		traverse(head->_leftChild, iter);
-		*iter++ = head->_data;
-		traverse(head->_rightChild, iter);
-}
+		if (val < head->_data)
+		{
+			insert(head->_leftChild, val);
+		}
+		else
+		{
+			insert(head->_rightChild, val);
+		}
+
+  }
+	 //Needs to be an inorder traversal
+	 // Takes a pointer to a tree and an iterator by reference
+	 // If the pointer is null, return.
+	 //
+	void traverse(std::shared_ptr<BSTreeNode<ValType>> & head,
+						FDIter & iter)
+	{
+			if (head == nullptr)
+				return;
+
+			traverse(head->_leftChild, iter);
+			*iter++ = head->_data;
+			traverse(head->_rightChild, iter);
+	}
+ };
+
+
+
+
 
 // treesort
 // Sort a given range using Treesort.
@@ -101,10 +124,10 @@ void treesort(FDIter first, FDIter last)
 		std::shared_ptr<BSTreeNode<ValType>> head = nullptr;
 		for (FDIter itemToInsert = first; itemToInsert != last; ++itemToInsert)
 		{
-			insert(head, *itemToInsert);
+			BSTree::insert(head, *itemToInsert);
 		}
 
-		traverse(head, first);
+		BSTree::traverse(head, first);
 }
 
 
