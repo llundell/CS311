@@ -22,20 +22,28 @@ using std::vector;
 #include <iterator>
 using std::distance;
 
-template <typename ValType>
+template <typename FDIter>
 struct BSTreeNode
 {
-    ValType _data;
+    FDIter _ptrToData;
     std::shared_ptr<BSTreeNode> _leftChild;
     std::shared_ptr<BSTreeNode> _rightChild;
 
-    explicit BSTreeNode(const ValType & data,
+		explicit BSTreeNode(FDIter iter,
                         std::shared_ptr<BSTreeNode> leftChild = nullptr,
                         std::shared_ptr<BSTreeNode> rightChild = nullptr)
-        :_data(data),
+        :_ptrToData(*iter),
         _leftChild(leftChild),
         _rightChild(rightChild)
     {}
+
+    // explicit BSTreeNode(const ValType & data,
+    //                     std::shared_ptr<BSTreeNode> leftChild = nullptr,
+    //                     std::shared_ptr<BSTreeNode> rightChild = nullptr)
+    //     :_data(data),
+    //     _leftChild(leftChild),
+    //     _rightChild(rightChild)
+    // {}
     ~BSTreeNode() = default;
 
     BSTreeNode & operator<(const BSTreeNode & other)
@@ -45,15 +53,25 @@ struct BSTreeNode
 };
 
 
-template <typename ValType>
+template <typename FDIter>
 class BSTree
 {
-    using DATA_TYPE = std::shared_ptr<BSTreeNode<ValType>>;
+    using DATA_TYPE = std::shared_ptr<BSTreeNode<FDIter>>;
 private:
     DATA_TYPE _root;
- public:
-    BSTree() :_root()
-    {}
+public:
+	BSTree() :_root()
+  {}
+
+	// Create new binary tree with nullptr at head
+	BSTree(FDIter first, FDIter last) :_root()
+	{
+		for (FDIter itemToInsert = first; itemToInsert != last; ++itemToInsert)
+		{
+			insert(*itemToInsert);
+		}
+	}
+
      /*** Remaining 4 Constructors deleted ***/
   //Copy-Constructor
   BSTree(const BSTree & other) = delete;
@@ -67,22 +85,21 @@ private:
 
 	// Insert()
 	// Takes a smart pointer by reference and the item to be inserted
-	void insert(std::shared_ptr<BSTreeNode<ValType>> & head, ValType val)
+	void insert(DATA_TYPE leaf, FDIter iter)
 	{
 		// if pointer is empty, set it to point to a new node
-		if (head == nullptr)
+		if (leaf == nullptr)
 		{
-			head = std::make_shared<BSTreeNode<ValType>>(val);
-			return;
+			leaf = std::make_shared<BSTreeNode<FDIter>>(*iter);
 		}
 
-		if (val < head->_data)
+		if (*iter < *(leaf->_ptrToData))
 		{
-			insert(head->_leftChild, val);
+			insert(leaf->_leftChild, *iter);
 		}
 		else
 		{
-			insert(head->_rightChild, val);
+			insert(leaf->_rightChild, *iter);
 		}
 
   }
@@ -90,17 +107,16 @@ private:
 	 // Takes a pointer to a tree and an iterator by reference
 	 // If the pointer is null, return.
 	 //
-	void traverse(std::shared_ptr<BSTreeNode<ValType>> & head,
-						FDIter & iter)
+	void traverse(DATA_TYPE leaf, FDIter & iter)
 	{
-			if (head == nullptr)
-				return;
-
-			traverse(head->_leftChild, iter);
-			*iter++ = head->_data;
-			traverse(head->_rightChild, iter);
+			if (leaf != nullptr)
+			{
+				traverse(leaf ->_leftChild, iter);
+				*iter++ = *(leaf->_ptrToData);
+				traverse(leaf->_rightChild, iter);
+			}
 	}
- };
+};
 
 
 
@@ -119,15 +135,8 @@ void treesort(FDIter first, FDIter last)
 {
     // ValType is the type that FDIter points to
     using ValType = typename iterator_traits<FDIter>::value_type;
-
-		// Create new binary tree with nullptr at head
-		std::shared_ptr<BSTreeNode<ValType>> head = nullptr;
-		for (FDIter itemToInsert = first; itemToInsert != last; ++itemToInsert)
-		{
-			BSTree::insert(head, *itemToInsert);
-		}
-
-		BSTree::traverse(head, first);
+		BSTree<FDIter> tree = BSTree(first, last);
+		tree.traverse(first);
 }
 
 
