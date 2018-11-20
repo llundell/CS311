@@ -2,9 +2,8 @@
 //	Laura Lundell & Khan Howe
 //	Started: 11/13/18
 //	Updated: 11/20/18
-//	Header for class treesort.h
+//	Header for function template treesort.h
 //	Exercise A: Treesort
-//	Exercise B: Associative Dataset Class Template
 /*	Sources used:
 *			Dr. Chappell's slides treesort.h skeleton
 */
@@ -21,105 +20,157 @@ using std::move;
 using std::vector;
 #include <iterator>
 using std::distance;
-#include <iostream>
+#include <memory>
+// For std::shared_ptr and std::make_shared
 
-
+// struct BSTreeNode
+// Takes client-specified value type
+// Invariants:
+//	_data = data
+//  _left = left in the node or a nullptr
+//  _right = right in the node or a nullptr
+// Requrements on types:
+//		ValType needs a copy constructor,
+//			destructor that doesn't throw, and
+//				operator < for insert() function
 template <typename ValType>
 struct BSTreeNode
 {
     ValType _data;
-    std::shared_ptr<BSTreeNode> _leftChild;
-    std::shared_ptr<BSTreeNode> _rightChild;
+    std::shared_ptr<BSTreeNode<ValType>> _leftChild;
+    std::shared_ptr<BSTreeNode<ValType>> _rightChild;
 
     BSTreeNode() :_data(), _leftChild(nullptr), _rightChild(nullptr)
     {}
 
-
+	// 	BSTreeNode Constructor
+	// 	Pre-conditions:
+	//		Data must be valid, non-empty
+	//	Post-conditions:
+	//		Creates Binary Search Tree node with no children
+	//	Strong guarantee, exception neutral but
+	//		exception may throw if ValType throws
 	explicit BSTreeNode(const ValType & data,
-                    std::shared_ptr<BSTreeNode> leftChild = nullptr,
-                    std::shared_ptr<BSTreeNode> rightChild = nullptr)
-    :_data(data),
-    _leftChild(leftChild),
-    _rightChild(rightChild)
+                    	std::shared_ptr<BSTreeNode<ValType>> leftChild = nullptr,
+                    	std::shared_ptr<BSTreeNode<ValType>> rightChild = nullptr)
+    									:_data(data),
+									    _leftChild(leftChild),
+									    _rightChild(rightChild)
     {}
-
-    // explicit BSTreeNode(const ValType & data,
-    //                     std::shared_ptr<BSTreeNode> leftChild = nullptr,
-    //                     std::shared_ptr<BSTreeNode> rightChild = nullptr)
-    //     :_data(data),
-    //     _leftChild(leftChild),
-    //     _rightChild(rightChild)
-    // {}
+		// Destructor
     ~BSTreeNode() = default;
 };
 
-
-
-// Insert()
-// Takes a smart pointer by reference and the item to be inserted
+//	Insert()
+//	Pre-condition:
+//		Takes a pointer to a tree and a data item
+//			by reference
+//	Post-condition:
+//		Inserts data item uses recursive calls to
+//			place item in sorted place
+//	Requrements on types:
+//		ValType needs a copy constructor,
+//			destructor that doesn't throw, and
+//				operator < for insert() function
+//	Exceptions:
+//		Throws if ValType operation throws
 template <typename ValType>
-void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode, ValType & item)
+void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode,
+						ValType & item)
 {
-    // if pointer is empty, set it to point to a new node
-    if (treeNode == nullptr)
-    {
-        //TODO This line causing issues
-        treeNode = std::make_shared<BSTreeNode<ValType>>();
-    }
-    if (item < (treeNode->_data))
-    {
-        insert(treeNode->_leftChild, item);
-    }
-    else
-    {
-        insert(treeNode->_rightChild, item);
-    }
+/***********
+		// // If pointer is empty, set it to point to a new node
+    // if (treeNode == nullptr)
+    // {
+    //     //TODO This line causing issues
+    //     treeNode = std::make_shared<BSTreeNode<ValType>>(item);
+    // }
+************/
 
+    if (item < treeNode-> _data)
+    {
+				// check if there is a left node exists
+				// instead of checking for null pointer
+        if (treeNode-> _leftChild) {
+            insert(treeNode-> _leftChild, item);
+        } else {
+            treeNode-> _leftChild = std::make_shared<BSTreeNode<ValType>>(item);
+        }
+    }
+		else
+    {
+				// If right child exists, insert
+        if (treeNode-> _rightChild) {
+            insert(treeNode-> _rightChild, item);
+        } else {
+            treeNode-> _rightChild = std::make_shared<BSTreeNode<ValType>>(item);
+        }
+    }
 }
 
-//Needs to be an inorder traversal
-// Takes a pointer to a tree and an iterator by reference
-// If the pointer is null, return.
-//
-template <typename FDIter, typename ValType>
-void traverse(std::shared_ptr<BSTreeNode<ValType>> treeNode, FDIter & iter)
+//	traverse()
+//	Pre-conditions:
+//		Takes valid pointer
+//	Post-condition:
+//		Traverses a binary tree
+//	Completes inorder traversal of binary search tree using recursion
+//	Takes a pointer to a tree and an iterator by reference
+//	Requrements on types:
+//		ValType needs a copy constructor,
+//			destructor that doesn't throw, and
+//				operator < for insert() function
+//	Exceptions: May throw if ValType operation throws
+//	No-throw guarantee, exception neutral
+//	Part of the FDIter type, not its own type
+template <typename FDIter>
+FDIter traverse(std::shared_ptr<BSTreeNode<typename std::iterator_traits<FDIter>::value_type>> & treeNode,
+							FDIter iter)
 {
-       if (treeNode != nullptr)
-       {
-           traverse(treeNode->_leftChild, iter);
-           *iter++ = (treeNode->_data);
-           traverse(treeNode->_rightChild, iter);
-       }
+				// check if left child exists instead of checking for nullptr
+        if (treeNode-> _leftChild)
+				{
+            iter = traverse(treeNode-> _leftChild, iter);
+        }
+        *iter = (treeNode-> _data);
+        ++iter;
+        if (treeNode-> _rightChild)
+				{
+             iter = traverse(treeNode-> _rightChild, iter);
+        }
+
+        return iter;
 }
 
-
-
-
-
-// treesort
-// Sort a given range using Treesort.
-// Pre:
-//     ???
-// Requirements on Types:
-//     ???
-// Exception safety guarantee:
-//     ???
+//	treesort()
+//	Pre-conditions:
+//		Iterators first, last must be in the same range
+//		FDIter last must be greater than or equal to first
+//	Post-condition:
+//		Sort a given range using Treesort
+//	Requrements on types:
+//		ValType needs a copy constructor,
+//			destructor that doesn't throw, and
+//				operator < for insert() function
+//	Exceptions: May throw if ValType operation throws
 template<typename FDIter>
 void treesort(FDIter first, FDIter last)
 {
     // ValType is the type that FDIter points to
     using ValType = typename iterator_traits<FDIter>::value_type;
-    auto root = std::make_shared<BSTreeNode<ValType>>();
 
-    int c = 0;
-    for (FDIter itemToInsert = first; itemToInsert != last; itemToInsert++)
-    {
-        std::cout << c << std::endl;
-        insert(root, *itemToInsert);
-        c +=1;
-    }
+    // Do nothing for an empty range
+    if (first == last) return;
+		// Root node using first value
+    auto root = std::make_shared<BSTreeNode<ValType>>(*first);
+    auto current = first; //current is first plus 1
+    ++current;
+
+    // Iterate from [first + 1, end)
+  for ( ; current != last; ++current)
+	{
+		insert(root, *current);
+	}
     traverse(root, first);
 }
-
 
 #endif //#ifndef FILE_TREESORT_H_INCLUDED
