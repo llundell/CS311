@@ -21,6 +21,7 @@ using std::move;
 using std::vector;
 #include <iterator>
 using std::distance;
+#include <iostream>
 
 
 template <typename ValType>
@@ -57,21 +58,22 @@ struct BSTreeNode
 // Insert()
 // Takes a smart pointer by reference and the item to be inserted
 template <typename ValType>
-void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode, const ValType & item)
+void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode, ValType & item)
 {
-    // // if pointer is empty, set it to point to a new node
-    // if (treeNode == nullptr)
-    // {
-    //     treeNode = std::make_shared<BSTreeNode<ValType>>(item);
-    // }
-    // if (item < (treeNode->_data))
-    // {
-    //     insert(treeNode->_leftChild, item);
-    // }
-    // else
-    // {
-    //     insert(treeNode->_rightChild, item);
-    // }
+    // if pointer is empty, set it to point to a new node
+    if (treeNode == nullptr)
+    {
+        //TODO This line causing issues
+        treeNode = std::make_shared<BSTreeNode<ValType>>();
+    }
+    if (item < (treeNode->_data))
+    {
+        insert(treeNode->_leftChild, item);
+    }
+    else
+    {
+        insert(treeNode->_rightChild, item);
+    }
 
 }
 
@@ -82,12 +84,12 @@ void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode, const ValType & ite
 template <typename FDIter, typename ValType>
 void traverse(std::shared_ptr<BSTreeNode<ValType>> treeNode, FDIter & iter)
 {
-       // if (treeNode != nullptr)
-       // {
-       //     traverse(treeNode->_leftChild, iter);
-       //     *iter++ = (treeNode->_data);
-       //     traverse(treeNode->_rightChild, iter);
-       // }
+       if (treeNode != nullptr)
+       {
+           traverse(treeNode->_leftChild, iter);
+           *iter++ = (treeNode->_data);
+           traverse(treeNode->_rightChild, iter);
+       }
 }
 
 
@@ -107,10 +109,14 @@ void treesort(FDIter first, FDIter last)
 {
     // ValType is the type that FDIter points to
     using ValType = typename iterator_traits<FDIter>::value_type;
-    std::shared_ptr<BSTreeNode<ValType>> root;
-    for (FDIter itemToInsert = first; itemToInsert != last; ++itemToInsert)
+    auto root = std::make_shared<BSTreeNode<ValType>>();
+
+    int c = 0;
+    for (FDIter itemToInsert = first; itemToInsert != last; itemToInsert++)
     {
+        std::cout << c << std::endl;
         insert(root, *itemToInsert);
+        c +=1;
     }
     traverse(root, first);
 }
