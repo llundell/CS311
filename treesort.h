@@ -6,6 +6,8 @@
 //	Exercise A: Treesort
 /*	Sources used:
 *			Dr. Chappell's slides treesort.h skeleton
+*			Charles helped eliminate checking for nullptr in insert() and traverse()
+*			and instead checking if left/right children exist before inserting/traversing
 */
 
 #ifndef FILE_TREESORTNOBSTREE_H_INCLUDED
@@ -78,19 +80,10 @@ template <typename ValType>
 void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode,
 						ValType & item)
 {
-/***********
-		// // If pointer is empty, set it to point to a new node
-    // if (treeNode == nullptr)
-    // {
-    //     //TODO This line causing issues
-    //     treeNode = std::make_shared<BSTreeNode<ValType>>(item);
-    // }
-************/
-
     if (item < treeNode-> _data)
     {
-				// check if there is a left node exists
-				// instead of checking for null pointer
+				// Check if there is a left node exists.
+				// Otherwise, create new node to insert data.
         if (treeNode-> _leftChild) {
             insert(treeNode-> _leftChild, item);
         } else {
@@ -99,7 +92,8 @@ void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode,
     }
 		else
     {
-				// If right child exists, insert
+				// If right child exists, insert data.
+				// Otherwise, create new node to insert data.
         if (treeNode-> _rightChild) {
             insert(treeNode-> _rightChild, item);
         } else {
@@ -137,7 +131,6 @@ FDIter traverse(std::shared_ptr<BSTreeNode<typename std::iterator_traits<FDIter>
 				{
              iter = traverse(treeNode-> _rightChild, iter);
         }
-
         return iter;
 }
 
@@ -162,7 +155,8 @@ void treesort(FDIter first, FDIter last)
     if (first == last) return;
 		// Root node using first value
     auto root = std::make_shared<BSTreeNode<ValType>>(*first);
-    auto current = first; //current is first plus 1
+		//current is first plus 1
+		auto current = first;
     ++current;
 
     // Iterate from [first + 1, end)
