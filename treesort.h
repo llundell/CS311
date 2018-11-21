@@ -14,16 +14,7 @@
 #define FILE_TREESORTNOBSTREE_H_INCLUDED
 
 #include <iterator>
-using std::iterator_traits;
-#include <algorithm>
-using std::stable_sort;
-using std::move;
-#include <vector>
-using std::vector;
-#include <iterator>
-using std::distance;
 #include <memory>
-// For std::shared_ptr and std::make_shared
 
 // struct BSTreeNode
 // Takes client-specified value type
@@ -55,11 +46,11 @@ struct BSTreeNode
 	explicit BSTreeNode(const ValType & data,
                     	std::shared_ptr<BSTreeNode<ValType>> leftChild = nullptr,
                     	std::shared_ptr<BSTreeNode<ValType>> rightChild = nullptr)
-    									:_data(data),
-									    _leftChild(leftChild),
-									    _rightChild(rightChild)
+			:_data(data),
+		    _leftChild(leftChild),
+		    _rightChild(rightChild)
     {}
-		// Destructor
+	//Destructor
     ~BSTreeNode() = default;
 };
 
@@ -82,21 +73,19 @@ void insert(std::shared_ptr<BSTreeNode<ValType>> & treeNode,
 {
     if (item < treeNode-> _data)
     {
-				// Check if there is a left node exists.
-				// Otherwise, create new node to insert data.
+
         if (treeNode-> _leftChild) {
             insert(treeNode-> _leftChild, item);
-        } else {
+        }
+        else {
             treeNode-> _leftChild = std::make_shared<BSTreeNode<ValType>>(item);
         }
     }
-		else
-    {
-				// If right child exists, insert data.
-				// Otherwise, create new node to insert data.
+    else {
         if (treeNode-> _rightChild) {
             insert(treeNode-> _rightChild, item);
-        } else {
+        }
+        else {
             treeNode-> _rightChild = std::make_shared<BSTreeNode<ValType>>(item);
         }
     }
@@ -120,18 +109,17 @@ template <typename FDIter>
 FDIter traverse(std::shared_ptr<BSTreeNode<typename std::iterator_traits<FDIter>::value_type>> & treeNode,
 							FDIter iter)
 {
-				// check if left child exists instead of checking for nullptr
-        if (treeNode-> _leftChild)
-				{
-            iter = traverse(treeNode-> _leftChild, iter);
-        }
-        *iter = (treeNode-> _data);
-        ++iter;
-        if (treeNode-> _rightChild)
-				{
-             iter = traverse(treeNode-> _rightChild, iter);
-        }
-        return iter;
+    if (treeNode-> _leftChild) {
+        iter = traverse(treeNode-> _leftChild, iter);
+    }
+
+    *iter = (treeNode-> _data);
+    ++iter;
+
+    if (treeNode-> _rightChild) {
+        iter = traverse(treeNode-> _rightChild, iter);
+    }
+    return iter;
 }
 
 //	treesort()
@@ -148,22 +136,21 @@ FDIter traverse(std::shared_ptr<BSTreeNode<typename std::iterator_traits<FDIter>
 template<typename FDIter>
 void treesort(FDIter first, FDIter last)
 {
-    // ValType is the type that FDIter points to
-    using ValType = typename iterator_traits<FDIter>::value_type;
 
-    // Do nothing for an empty range
-    if (first == last) return;
-		// Root node using first value
+    using ValType = typename std::iterator_traits<FDIter>::value_type;
+
+    if (first == last) {
+        return;
+    }
+
     auto root = std::make_shared<BSTreeNode<ValType>>(*first);
-		//current is first plus 1
-		auto current = first;
+	auto current = first;
     ++current;
 
-    // Iterate from [first + 1, end)
-  for ( ; current != last; ++current)
-	{
+     for ( ; current != last; ++current) {
 		insert(root, *current);
-	}
+    }
+
     traverse(root, first);
 }
 
