@@ -1,5 +1,6 @@
 //	followers.cpp
 //	Laura Lundell & Khan Howe
+//	For CS 311 Fall 2018
 //	Started: 11/29/18
 //	Updated: 12/4/18
 //	Source for followers.cpp
@@ -8,3 +9,29 @@
 *			Dr. Chappell's slides on Project 8 thoughts
 *
 */
+
+#include <iostream>
+#include <string>
+using std::string;
+using std::getline;
+using std::cin;
+using std::cout;
+using std::endl;
+#include <fstream>
+using std::ifstream;
+
+int main()
+{
+	string file;
+	ifstream inputFile {file};
+
+
+	while (true)
+	{
+		cout<<"Enter a file name to be read: "<<endl;
+		getline(cin, file);
+
+
+	}
+	return 0;
+}
