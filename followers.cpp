@@ -23,13 +23,31 @@ using std::ifstream;
 int main()
 {
 	string file;
-	ifstream inputFile {file};
+
+
 
 
 	while (true)
 	{
 		cout<<"Enter a file name to be read: "<<endl;
 		getline(cin, file);
+		ifstream inputFile {file};
+
+		// if(!inputFile)
+		// {
+		//
+		// }
+		if (inputFile.is_open())
+		{
+			while(getline(inputFile, file))
+			{
+				cout<< file << endl;
+			}
+
+
+		}
+		else cout << "Unable to open file";
+
 
 
 	}
