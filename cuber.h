@@ -1,3 +1,6 @@
+#ifndef FILE_CUBER_H_INCLUDED
+#define FILE_CUBER_H_INCLUDED
+
 // class Cuber
 // Class invariants: None.
 class Cuber {
@@ -18,3 +21,5 @@ public:
     // Default ctor, copy ctor, move ctor, copy =, move =, dctor:
     // automatically generated versions used.
 };
+
+#endif //#ifndef FILE_CUBER_H_INCLUDED
