@@ -62,7 +62,6 @@ TEST_CASE("TEST LARGE RANGE OF VALUES")
         REQUIRE(cc(3.14)==30.959144000000002);
     }
 
-<<<<<<< HEAD
 }
 
 TEST_CASE("Test negative ints")
@@ -89,9 +88,5 @@ TEST_CASE("Test doubles")
 		INFO("2.3 cubed is 12.167");
 		REQUIRE(cc(2.3)== Approx(12.167));
 	}
-=======
-
-
->>>>>>> origin/master
 
 }

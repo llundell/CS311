@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-#ifndef FILE_CUBER_H_INCLUDED
-#define FILE_CUBER_H_INCLUDED
-
->>>>>>> origin/master
 // class Cuber
 // Class invariants: None.
 class Cuber {
@@ -24,8 +18,3 @@ public:
     // Default ctor, copy ctor, move ctor, copy =, move =, dctor:
     // automatically generated versions used.
 };
-<<<<<<< HEAD
-=======
-
-#endif //#ifndef FILE_CUBER_H_INCLUDED
->>>>>>> origin/master
