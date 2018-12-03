@@ -19,37 +19,31 @@ using std::cout;
 using std::endl;
 #include <fstream>
 using std::ifstream;
+#include <set>
 
 int main()
 {
-	string file;
-
-
-
+	string file, word;
+	ifstream inputFile;
+	std::set<string> wordList;
 
 	while (true)
 	{
 		cout<<"Enter a file name to be read: "<<endl;
 		getline(cin, file);
-		ifstream inputFile {file};
-
-		// if(!inputFile)
-		// {
-		//
-		// }
+		inputFile.open(file);
 		if (inputFile.is_open())
-		{
-			while(getline(inputFile, file))
-			{
-				cout<< file << endl;
-			}
-
-
-		}
-		else cout << "Unable to open file";
-
-
-
+			break;
+		cout << "Unable to open file. Try another filename." << endl;
 	}
+	int counts;
+	while(inputFile >> word)
+	{
+		counts++;
+		wordList.insert(word);
+	}
+
+	cout<< "There are " << counts << " total words and " <<
+		wordList.size() << " distinct words in the file." << endl;
 	return 0;
 }
