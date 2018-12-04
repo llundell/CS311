@@ -170,3 +170,13 @@ TEST_CASE("Const Cubers")
 			REQUIRE(cc(3.14) == Approx(30.959144000000002));
 	}
 }
+
+TEST_CASE("Cube type Char")
+{
+    Cuber cc;
+    {
+        char test1 = 5;
+        INFO("Char 5 cubed is 125");
+        REQUIRE(cc(test1) == 125);
+    }
+}
