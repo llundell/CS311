@@ -34,7 +34,7 @@ TEST_CASE("TEST LARGE RANGE OF VALUES")
     Cuber cc;
     {
         INFO("0 cubed is 0");
-        REQUIRE(cc(0)==0);
+        REQUIRE(cc(0) == 0);
     }
     {
         INFO("1 cubed is 1");
@@ -107,19 +107,19 @@ TEST_CASE("Test positive doubles")
 	Cuber cc;
 	{
 		INFO("1.1 cubed is 1.331");
-		REQUIRE(cc(1.1)== Approx(1.331));
+		REQUIRE(cc(1.1) == Approx(1.331));
 	}
 	{
 		INFO("2.3 cubed is 12.167");
-		REQUIRE(cc(2.3)== Approx(12.167));
+		REQUIRE(cc(2.3) == Approx(12.167));
 	}
 	{
 		INFO("3.6 cubed is 46.656");
-		REQUIRE(cc(3.6)== Approx(46.656));
+		REQUIRE(cc(3.6) == Approx(46.656));
 	}
 	{
 		INFO("4.7 cubed is 103.823");
-		REQUIRE(cc(4.7)== Approx(103.823));
+		REQUIRE(cc(4.7) == Approx(103.823));
 	}
 }
 
@@ -129,19 +129,19 @@ TEST_CASE("Test negative doubles")
 	Cuber cc;
 	{
 		INFO("-1.1 cubed is -1.331");
-		REQUIRE(cc(-1.1)== Approx(-1.331));
+		REQUIRE(cc(-1.1) == Approx(-1.331));
 	}
 	{
 		INFO("-2.3 cubed is -12.167");
-		REQUIRE(cc(2.3)== Approx(12.167));
+		REQUIRE(cc(2.3) == Approx(12.167));
 	}
 	{
 		INFO("-3.6 cubed is -46.656");
-		REQUIRE(cc(-3.6)== Approx(-46.656));
+		REQUIRE(cc(-3.6) == Approx(-46.656));
 	}
 	{
 		INFO("-4.7 cubed is -103.823");
-		REQUIRE(cc(-4.7)== Approx(-103.823));
+		REQUIRE(cc(-4.7) == Approx(-103.823));
 	}
 }
 
@@ -151,7 +151,7 @@ TEST_CASE("Const Cubers")
 	const Cuber cc;
 	{
 			INFO("0 cubed is 0");
-			REQUIRE(cc(0)==0);
+			REQUIRE(cc(0) == 0);
 	}
 	{
 			INFO("1 cubed is 1");
