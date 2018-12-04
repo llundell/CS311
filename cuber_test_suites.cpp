@@ -64,8 +64,8 @@ TEST_CASE("Test positive ints")
 		REQUIRE(cc(5) == 125);
 	}
 	{
-		INFO("10 cubed is 10");
-		REQUIRE(cc(10) == 1);
+		INFO("10 cubed is 1000");
+		REQUIRE(cc(10) == 1000);
 	}
 	{
 		INFO("17 cubed is 4913");
@@ -96,7 +96,7 @@ TEST_CASE("Test negative ints")
 	}
 	{
 		INFO("-253 cubed is -16194277");
-		REQUIRE(cc(-100) == -16194277);
+		REQUIRE(cc(-253) == -16194277);
 	}
 
 }
