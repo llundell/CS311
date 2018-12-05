@@ -171,6 +171,7 @@ TEST_CASE("Const Cubers")
 	}
 }
 
+// Testing for character types
 TEST_CASE("Cube type Char")
 {
     Cuber cc;
@@ -179,4 +180,9 @@ TEST_CASE("Cube type Char")
         INFO("Char 5 cubed is 125");
         REQUIRE(cc(test1) == 125);
     }
+		{
+				char test1 = -5;
+				INFO("Char -5 cubed is -125");
+				REQUIRE(cc(test1) == -125);
+		}
 }
